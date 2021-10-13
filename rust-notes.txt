@@ -1,0 +1,6 @@
+=RUST NOTES=
+
+Reference: &x ("Borrow" x when passing by reference- remains owned by original owner)
+Dereference: *x (Value stored at reference)
+
+Documentation (Offline): >rustup doc --std

@@ -1,3 +1,5 @@
+use std::fs;
+
 /*
  * =========
  * HELP
@@ -18,6 +20,7 @@ pub fn help() {
     println!("\t-- hello <NAME>                          Says hello to you and your friends");
     println!("\t-- rangesum <LOWER BOUND> <UPPER BOUND>  Sums all the numbers from the lower bound to the higher bound");
     println!("\t-- factorial <NUMBER>                    Returns the factorial of the given number");
+    println!("\t-- notes, -- n                           Shows personal notes on Rust saved to computer");
 }
 
 /*
@@ -156,4 +159,17 @@ fn factorial_get_num(args: Vec<String>) -> Result<u128, &'static str> {
         }
         _ => Err("incorrect number of arguments")
     }
+}
+
+/*
+ * =========
+ * NOTES
+ * =========
+ * This command prints the Rust notes saved to the computer.
+ */
+pub fn notes() {
+    let text_file = fs::read_to_string("rust-notes.txt")
+        .expect("error: problem reading text file");
+
+    println!("{}", text_file);
 }

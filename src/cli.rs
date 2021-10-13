@@ -9,6 +9,7 @@ pub enum CliCommand {
     Hello,
     Rangesum,
     Factorial,
+    Notes,
 }
 
 pub struct Cli {
@@ -34,15 +35,17 @@ pub fn execute_command(cli: Cli) -> () {
         CliCommand::Hello     => cmd::hello(cli.args),
         CliCommand::Rangesum  => cmd::rangesum(cli.args),
         CliCommand::Factorial => cmd::factorial(cli.args),
+        CliCommand::Notes     => cmd::notes(),
     }
 }
 
 fn parse_command(args: &String) -> CliCommand {
     match &args.as_str() {
-        &"help" | &"h" => CliCommand::Help,
-        &"hello"       => CliCommand::Hello,
-        &"rangesum"    => CliCommand::Rangesum,
-        &"factorial"   => CliCommand::Factorial,
+        &"help" | &"h"  => CliCommand::Help,
+        &"hello"        => CliCommand::Hello,
+        &"rangesum"     => CliCommand::Rangesum,
+        &"factorial"    => CliCommand::Factorial,
+        &"notes" | &"n" => CliCommand::Notes,
 
         _ => CliCommand::Unknown
     }

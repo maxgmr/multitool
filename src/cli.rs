@@ -10,6 +10,7 @@ pub enum CliCommand {
     Rangesum,
     Factorial,
     Notes,
+    Sum,
 }
 
 pub struct Cli {
@@ -36,6 +37,7 @@ pub fn execute_command(cli: Cli) -> () {
         CliCommand::Rangesum  => cmd::rangesum(cli.args),
         CliCommand::Factorial => cmd::factorial(cli.args),
         CliCommand::Notes     => cmd::notes(),
+        CliCommand::Sum       => cmd::sum(cli.args),
     }
 }
 
@@ -46,6 +48,7 @@ fn parse_command(args: &String) -> CliCommand {
         &"rangesum"     => CliCommand::Rangesum,
         &"factorial"    => CliCommand::Factorial,
         &"notes" | &"n" => CliCommand::Notes,
+        &"sum" | &"s"   => CliCommand::Sum,
 
         _ => CliCommand::Unknown
     }

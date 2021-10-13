@@ -1,4 +1,5 @@
-use std::fs;
+use std::fs::File;
+use std::io::Read;
 
 /*
  * =========
@@ -33,7 +34,7 @@ pub fn hello(args: Option<Vec<String>>) {
     match args {
         //Some(xs) => println!("Hello, {}!", xs[0]),
         Some(xs) => {
-            for x in xs {
+            for x in xs.iter() {
                 println!("Hello, {}!", x)
             }
         }
@@ -168,8 +169,56 @@ fn factorial_get_num(args: Vec<String>) -> Result<u128, &'static str> {
  * This command prints the Rust notes saved to the computer.
  */
 pub fn notes() {
-    let text_file = fs::read_to_string("rust-notes.txt")
-        .expect("error: problem reading text file");
+    match read_to_string(&"rust-notes.txt") {
+        Ok(text) => println!("{}", text),
+        Err(e) => println!("{}", e)
+    }
+}
 
-    println!("{}", text_file);
+fn read_to_string(filename: &str) -> Result<String, &'static str> {
+    let mut file = match File::open(&filename) {
+        Ok(f) => f,
+        Err(_) => return Err("Error opening file.")
+    };
+    let mut file_text = String::new();
+    match file.read_to_string(&mut file_text) {
+        Ok(_) => Ok(file_text),
+        Err(_) => Err("Error reading file.")
+    }
+}
+
+/*
+ * =========
+ * SUM
+ * =========
+ * This command prints the sum of a given list of numbers.
+ */
+pub fn sum(args: Option<Vec<String>>) {
+    match args {
+        Some(xs) => {
+            let numbers: Vec<f64> = xs.iter().flat_map(|x| x.parse()).collect();
+
+            if numbers.len() == 0 {
+                println!("error: Invalid arguments. Arguments must be numbers.");
+                println!("");
+                println!("USAGE:");
+                println!("\tcargo run -- sum <NUMBER1> <NUMBER2>...");
+            } else {
+                println!("Sum = {:.2}", sum_numlist(&numbers[..]))
+            }
+        }
+        None => {
+            println!("error: No arguments");
+            println!("");
+            println!("USAGE:");
+            println!("\tcargo run -- sum <NUMBER1> <NUMBER2>...");
+        }
+    }
+}
+
+fn sum_numlist(list: &[f64]) -> f64 {
+    match list {
+        [] => 0.0,
+        [n, ns @ ..] => n + sum_numlist(ns)
+    }
 }

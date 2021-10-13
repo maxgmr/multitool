@@ -1,3 +1,9 @@
+/*
+ * =========
+ * HELP
+ * =========
+ * This command shows a list of commands and general program info.
+ */
 pub fn help() {
     println!("Multitool");
     println!("Has a variety of relatively unrelated functions");
@@ -8,5 +14,146 @@ pub fn help() {
     println!("");
 
     println!("COMMANDS:");
-    println!("\t-- help, -- h\t\tPrints usage information and command list");
+    println!("\t-- help, -- h                            Prints usage information and command list");
+    println!("\t-- hello <NAME>                          Says hello to you and your friends");
+    println!("\t-- rangesum <LOWER BOUND> <UPPER BOUND>  Sums all the numbers from the lower bound to the higher bound");
+    println!("\t-- factorial <NUMBER>                    Returns the factorial of the given number");
+}
+
+/*
+ * =========
+ * HELLO
+ * =========
+ * This command greets you using your name, or produces a list of greetings if given a list of names.
+ */
+pub fn hello(args: Option<Vec<String>>) {
+    match args {
+        //Some(xs) => println!("Hello, {}!", xs[0]),
+        Some(xs) => {
+            for x in xs {
+                println!("Hello, {}!", x)
+            }
+        }
+        None     => println!("Hello there!")
+    }
+}
+
+/*
+ * =========
+ * RANGESUM
+ * =========
+ * This command adds up all the numbers from arguments a to b.
+ */
+pub fn rangesum(args: Option<Vec<String>>) {
+    match args {
+        Some(xs) => {
+            let range = rangesum_get_range(xs);
+
+            match range {
+                Ok((lower_bound, upper_bound)) => {
+                    if lower_bound > upper_bound {
+                        println!("error: Lower bound must be smaller than upper bound");
+                        println!("");
+                        println!("USAGE:");
+                        println!("\tcargo run -- rangesum <LOWER BOUND> <UPPER BOUND>");
+                    } else {
+                        let mut sum = 0;
+                        for i in lower_bound..(upper_bound + 1) {
+                            sum += i;
+                        }
+
+                        println!("Sum from {} to {} is {}", lower_bound, upper_bound, sum);
+                    }
+                }
+                Err(e) => {
+                    println!("error: {:?}", e);
+                    println!("");
+                    println!("USAGE:");
+                    println!("\tcargo run -- rangesum <LOWER BOUND> <UPPER BOUND>");
+                }
+            }
+        }
+        None     => {
+            println!("error: No arguments");
+            println!("");
+            println!("USAGE:");
+            println!("\tcargo run -- rangesum <LOWER BOUND> <UPPER BOUND>");
+        }
+    }
+}
+
+fn rangesum_get_range(args: Vec<String>) -> Result<(u32, u32), &'static str> {
+    match args.len() {
+        2 => {
+            match args[0].parse::<u32>() {
+                Ok(n1) => {
+                    match args[1].parse::<u32>() {
+                        Ok(n2) => Ok((n1, n2)),
+                        Err(_) => Err("arguments must be positive integers")
+                    }
+                }
+                Err(_) => Err("arguments must be positive integers")
+            }
+        }
+        _ => Err("incorrect number of arguments")
+    }
+}
+
+/*
+ * =========
+ * FACTORIAL
+ * =========
+ * This command prints the factorial of the given number.
+ */
+pub fn factorial(args: Option<Vec<String>>) {
+    match args {
+        Some(xs) => {
+            match factorial_get_num(xs) {
+                Ok(n) => {
+                    let result = factorial_recursive(n);
+
+                    if result == 0 {
+                        println!("error: Argument must be positive");
+                        println!("");
+                        println!("USAGE:");
+                        println!("\tcargo run -- factorial <NUMBER>");
+                    } else {
+                        println!("{}! = {}", n, result)
+                    }
+                }
+                Err(e) => {
+                    println!("error: {}", e);
+                    println!("");
+                    println!("USAGE:");
+                    println!("\tcargo run -- factorial <NUMBER>");
+                }
+            }
+        }
+        None     => {
+            println!("error: No arguments");
+            println!("");
+            println!("USAGE:");
+            println!("\tcargo run -- factorial <NUMBER>");
+        }
+    }
+}
+
+fn factorial_recursive(n: u128) -> u128 {
+    if n == 0 {
+        1
+    } else {
+        n * factorial_recursive(n-1)
+    }
+}
+
+fn factorial_get_num(args: Vec<String>) -> Result<u128, &'static str> {
+    match args.len() {
+        1 => {
+            match args[0].parse::<u128>() {
+                Ok(n) => Ok(n),
+                Err(_) => Err("argument must be positive integer")
+            }
+        }
+        _ => Err("incorrect number of arguments")
+    }
 }

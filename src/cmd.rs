@@ -22,6 +22,7 @@ pub fn help() {
     println!("\t-- rangesum <LOWER BOUND> <UPPER BOUND>  Sums all the numbers from the lower bound to the higher bound");
     println!("\t-- factorial <NUMBER>                    Returns the factorial of the given number");
     println!("\t-- notes, -- n                           Shows personal notes on Rust saved to computer");
+    println!("\t-- sum, -- s <NUMBER1> <NUMBER2>...      Returns the sum of a list of given numbers");
 }
 
 /*
@@ -169,7 +170,7 @@ fn factorial_get_num(args: Vec<String>) -> Result<u128, &'static str> {
  * This command prints the Rust notes saved to the computer.
  */
 pub fn notes() {
-    match read_to_string(&"rust-notes.txt") {
+    match read_to_string(&"multitool-files/rust-notes.txt") {
         Ok(text) => println!("{}", text),
         Err(e) => println!("{}", e)
     }

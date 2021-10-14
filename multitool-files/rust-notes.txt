@@ -4,3 +4,5 @@ Reference: &x ("Borrow" x when passing by reference- remains owned by original o
 Dereference: *x (Value stored at reference)
 
 Documentation (Offline): >rustup doc --std
+
+Rust has block-based scope. Variables only exist for the duration of their block.

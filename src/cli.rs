@@ -1,5 +1,6 @@
 use crate::cmd;
 use crate::err;
+use crate::edit;
 
 pub enum CliCommand {
     Empty,
@@ -11,6 +12,7 @@ pub enum CliCommand {
     Factorial,
     Notes,
     Sum,
+    Edit,
 }
 
 pub struct Cli {
@@ -32,6 +34,8 @@ pub fn execute_command(cli: Cli) -> () {
         CliCommand::Empty     => err::empty(),
         CliCommand::Unknown   => err::unknown(),
 
+        CliCommand::Edit      => edit::edit(),
+
         CliCommand::Help      => cmd::help(),
         CliCommand::Hello     => cmd::hello(cli.args),
         CliCommand::Rangesum  => cmd::rangesum(cli.args),
@@ -49,6 +53,7 @@ fn parse_command(args: &String) -> CliCommand {
         &"factorial"    => CliCommand::Factorial,
         &"notes" | &"n" => CliCommand::Notes,
         &"sum" | &"s"   => CliCommand::Sum,
+        &"edit" | &"e"  => CliCommand::Edit,
 
         _ => CliCommand::Unknown
     }

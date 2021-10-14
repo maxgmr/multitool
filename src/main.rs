@@ -10,6 +10,7 @@
 mod cli;
 mod cmd;
 mod err;
+mod edit;
 
 use std::env;
 
